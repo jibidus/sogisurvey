@@ -7,4 +7,6 @@ FROM openjdk:21
 EXPOSE 8080:8080
 RUN mkdir /app
 COPY --from=build /home/gradle/src/build/libs/*.jar /app/sogisurvey.jar
+COPY src/docker/wait-for-it.sh /app/
+RUN chmod +x /app/wait-for-it.sh
 ENTRYPOINT ["java", "-jar", "/app/sogisurvey.jar"]
