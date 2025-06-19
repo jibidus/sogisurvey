@@ -1,5 +1,6 @@
 package com.sogilis.com.sogilis.survey
 
+import kotlinx.html.FormMethod
 import kotlinx.html.HTML
 import kotlinx.html.InputType.range
 import kotlinx.html.InputType.submit
@@ -13,6 +14,7 @@ import kotlinx.html.head
 import kotlinx.html.header
 import kotlinx.html.input
 import kotlinx.html.label
+import kotlinx.html.link
 import kotlinx.html.main
 import kotlinx.html.meta
 import kotlinx.html.section
@@ -24,10 +26,10 @@ val homePage: HTML.() -> Unit = {
         meta(charset = "UTF-8")
         title("Sondage projet")
         // Documentation: https://picocss.com/
-        linkedMapOf("stylesheet" to "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
+        link(href = "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css", rel = "stylesheet")
     }
     body {
-        form {
+        form(method = FormMethod.post, action = "/") {
             header(classes = "container") {
                 h1 { +"Qu'est-ce qu'un \"bon\" projet ?" }
                 section {
@@ -178,7 +180,7 @@ val homePage: HTML.() -> Unit = {
             }
             footer(classes = "container") {
                 input(type = submit) {
-                    +"Valider"
+                    value = "Envoyer"
                 }
             }
         }

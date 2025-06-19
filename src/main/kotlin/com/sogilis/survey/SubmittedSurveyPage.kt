@@ -4,6 +4,7 @@ import kotlinx.html.HTML
 import kotlinx.html.article
 import kotlinx.html.body
 import kotlinx.html.head
+import kotlinx.html.link
 import kotlinx.html.main
 import kotlinx.html.meta
 import kotlinx.html.title
@@ -13,7 +14,7 @@ fun submittedSurveyPage(responsesCount: Int): HTML.() -> Unit = {
         meta(charset = "UTF-8")
         title("Sondage projet")
         // Documentation: https://picocss.com/
-        linkedMapOf("stylesheet" to "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css")
+        link(href = "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css", rel = "stylesheet")
     }
     body {
         main(classes = "container") {
