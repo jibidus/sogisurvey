@@ -8,4 +8,10 @@ class ResponsesRepository(val conn: Connection) {
             it.execute("INSERT INTO responses (author) VALUES ('test')")
         }
     }
+
+    fun count(): Int = conn.createStatement().use {
+        val rs = it.executeQuery("SELECT COUNT(*) FROM responses")
+        rs.next()
+        rs.getInt(1)
+    }
 }

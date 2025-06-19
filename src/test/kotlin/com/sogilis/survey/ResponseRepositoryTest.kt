@@ -7,14 +7,14 @@ import org.junit.jupiter.api.extension.RegisterExtension
 
 class ResponseRepositoryTest {
 
-    companion object{
+    companion object {
         @JvmField
         @RegisterExtension
         var database = DbExtension()
     }
 
     @Test
-    fun test() {
+    fun saveNewOne() {
         ResponsesRepository(database.connection).saveNewOne()
         database.connection.createStatement().use {
             val rs = it.executeQuery("SELECT COUNT(*) FROM responses")

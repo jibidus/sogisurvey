@@ -7,7 +7,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertContains
@@ -32,18 +31,12 @@ class ApplicationTest {
     }
 
     @Test
-    fun postSurvey() = testApplication {
+    fun submittedSurvey() = testApplication {
         application {
             installModules(database.connection)
         }
         val response = client.post("/")
         assertEquals(HttpStatusCode.OK, response.status)
-        database.connection.createStatement().use {
-            val rs = it.executeQuery("SELECT COUNT(*) FROM responses")
-            rs.next()
-            val count = rs.getInt(1)
-            Assertions.assertEquals(1, count)
-        }
-        assertContains(response.bodyAsText(), "Réponse enregistrée")
+        assertContains(response.bodyAsText(), "1 réponse(s) enregistrée(s)")
     }
 }

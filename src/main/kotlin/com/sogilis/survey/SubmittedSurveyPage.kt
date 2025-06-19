@@ -8,7 +8,7 @@ import kotlinx.html.main
 import kotlinx.html.meta
 import kotlinx.html.title
 
-val submittedSurveyPage: HTML.() -> Unit = {
+fun submittedSurveyPage(responsesCount: Int): HTML.() -> Unit = {
     head {
         meta(charset = "UTF-8")
         title("Sondage projet")
@@ -18,7 +18,7 @@ val submittedSurveyPage: HTML.() -> Unit = {
     body {
         main(classes = "container") {
             article {
-                +"Réponse enregistrée"
+                +"$responsesCount réponse(s) enregistrée(s)"
             }
         }
     }
