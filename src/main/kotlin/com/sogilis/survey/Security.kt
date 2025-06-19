@@ -1,15 +1,13 @@
-package com.sogilis
+package com.sogilis.survey
 
 import io.ktor.client.*
 import io.ktor.client.engine.apache.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.html.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
-import kotlinx.html.*
 
 fun Application.configureSecurity() {
     authentication {
@@ -34,7 +32,7 @@ fun Application.configureSecurity() {
             get("login") {
                 call.respondRedirect("/callback")
             }
-        
+
             get("/callback") {
                 val principal: OAuthAccessTokenResponse.OAuth2? = call.authentication.principal()
                 call.sessions.set(UserSession(principal?.accessToken.toString()))
@@ -43,4 +41,5 @@ fun Application.configureSecurity() {
         }
     }
 }
+
 class UserSession(accessToken: String)

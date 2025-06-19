@@ -1,8 +1,8 @@
 package com.sogilis.com.sogilis.survey
 
 
-import com.sogilis.installModules
 import com.sogilis.survey.DbExtension
+import com.sogilis.survey.installModules
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -28,8 +28,6 @@ class ApplicationTest {
         }
         val response = client.get("/")
         assertEquals(HttpStatusCode.OK, response.status)
-//        assertEquals("Hello World!", response.bodyAsText())
-        println(response.bodyAsText())
         assertContains(response.bodyAsText(), "Sondage")
     }
 
@@ -46,5 +44,6 @@ class ApplicationTest {
             val count = rs.getInt(1)
             Assertions.assertEquals(1, count)
         }
+        assertContains(response.bodyAsText(), "Réponse enregistrée")
     }
 }

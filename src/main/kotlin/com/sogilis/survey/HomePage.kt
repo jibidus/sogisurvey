@@ -19,7 +19,7 @@ import kotlinx.html.section
 import kotlinx.html.textArea
 import kotlinx.html.title
 
-fun homePage(): HTML.() -> Unit = {
+val homePage: HTML.() -> Unit = {
     head {
         meta(charset = "UTF-8")
         title("Sondage projet")
