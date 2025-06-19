@@ -1,6 +1,6 @@
 # survey
 
-https://sogisurvey.onrender.com
+Public url: https://sogisurvey.onrender.com
 
 * Pico CSS: https://picocss.com/docs/
 * Add labels to range
@@ -29,3 +29,7 @@ If the server starts successfully, you'll see the following output:
 2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
 ```
 
+## Infrastructure requirements
+
+* Java 21
+* `DATABASE_URL` environment variables (ex: `postgresql://localhost/test?user=fred&password=secret&ssl=true`)

@@ -9,8 +9,8 @@ import java.sql.DriverManager
 
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 8080) {
-        val conn: Connection =
-            DriverManager.getConnection("jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true")
+        val url = System.getenv("DATABASE_URL") ?: "postgresql://localhost/test?user=fred&password=secret&ssl=true"
+        val conn: Connection = DriverManager.getConnection("jdbc:$url")
         installModules(conn)
     }.start(wait = true)
 }
