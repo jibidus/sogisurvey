@@ -10,11 +10,12 @@ import io.ktor.server.testing.*
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class ApplicationTest {
 
-    companion object{
+    companion object {
         @JvmField
         @RegisterExtension
         var database = DbExtension()
@@ -27,7 +28,9 @@ class ApplicationTest {
         }
         val response = client.get("/")
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals("Hello World!", response.bodyAsText())
+//        assertEquals("Hello World!", response.bodyAsText())
+        println(response.bodyAsText())
+        assertContains(response.bodyAsText(), "Sondage")
     }
 
     @Test

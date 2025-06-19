@@ -15,7 +15,6 @@ fun main(args: Array<String>) {
 }
 
 fun Application.installModules(connection: Connection) {
-    configureTemplating()
     configureSecurity()
     configureRouting(connection)
 }
