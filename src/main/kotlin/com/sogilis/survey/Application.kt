@@ -6,10 +6,10 @@ import io.ktor.server.netty.*
 import java.sql.Connection
 import java.sql.DriverManager
 
-
 fun main(args: Array<String>) {
     embeddedServer(Netty, port = System.getenv("PORT")?.toInt() ?: 8080) {
-        val url = System.getenv("DATABASE_URL") ?: "postgresql://localhost/test?user=fred&password=secret&ssl=true"
+        val url =
+            System.getenv("DATABASE_URL") ?: "postgresql://localhost/jibidus?user=jibidus&ssl=false&port=5432"
         val conn: Connection = DriverManager.getConnection("jdbc:$url")
         setupDatabase(conn)
         installModules(conn)
