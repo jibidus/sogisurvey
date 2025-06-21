@@ -2,22 +2,92 @@ package com.sogilis.survey
 
 import com.sogilis.com.sogilis.survey.homePage
 import com.sogilis.com.sogilis.survey.submittedSurveyPage
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.html.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import java.sql.Connection
 
-fun Application.configureRouting(connection: Connection) {
+fun Application.configureRouting(connection: Connection, httpClient: HttpClient = applicationHttpClient) {
     val repository = ResponsesRepository(connection)
     routing {
         get("/") {
-            call.respondHtml(block = homePage)
+            val userSession: UserSession? = getSession(call)
+            if (userSession != null) {
+                println("Session found !")
+                val userInfo: UserInfo = getPersonalGreeting(httpClient, userSession)
+                call.respondHtml(block = homePage(userInfo.name))
+            }
         }
         post("/") {
-            repository.saveNewOne()
-            val responsesCount = repository.count()
-            call.respondHtml(block = submittedSurveyPage(responsesCount))
+            val userSession: UserSession? = getSession(call)
+            if (userSession != null) {
+                val userInfo: UserInfo = getPersonalGreeting(httpClient, userSession)
+                repository.saveNewOne(userInfo.name)
+                val responsesCount = repository.count()
+                call.respondHtml(block = submittedSurveyPage(responsesCount))
+            }
+        }
+        get("/{path}") {
+            val userSession: UserSession? = getSession(call)
+            if (userSession != null) {
+                val userInfo: UserInfo =
+                    getPersonalGreeting(httpClient, userSession)
+                call.respondText("Hello, ${userInfo.name}!")
+            }
         }
     }
 }
 
+val applicationHttpClient = HttpClient(CIO) {
+    install(ContentNegotiation) {
+        json()
+    }
+}
+
+private suspend fun getPersonalGreeting(
+    httpClient: HttpClient,
+    userSession: UserSession
+): UserInfo = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
+    headers {
+        append(HttpHeaders.Authorization, "Bearer ${userSession.token}")
+    }
+}.body()
+
+private suspend fun getSession(
+    call: ApplicationCall
+): UserSession? {
+    val userSession: UserSession? = call.sessions.get()
+    //if there is no session, redirect to login
+    if (userSession == null) {
+        val redirectUrl = URLBuilder("http://localhost:8080/login").run {
+            parameters.append("redirectUrl", call.request.uri)
+            build()
+        }
+        call.respondRedirect(redirectUrl)
+        return null
+    }
+    return userSession
+}
+
+
+@Serializable
+data class UserInfo(
+    val id: String,
+    val name: String,
+    @SerialName("given_name") val givenName: String,
+//    @SerialName("family_name") val familyName: String,
+    val picture: String,
+//    val locale: String
+)

@@ -21,7 +21,7 @@ import kotlinx.html.section
 import kotlinx.html.textArea
 import kotlinx.html.title
 
-val homePage: HTML.() -> Unit = {
+fun homePage(userName: String): HTML.() -> Unit = {
     head {
         meta(charset = "UTF-8")
         title("Sondage projet")
@@ -31,6 +31,9 @@ val homePage: HTML.() -> Unit = {
     body {
         form(method = FormMethod.post, action = "/") {
             header(classes = "container") {
+                section {
+                    +"Bienvenue ${userName}"
+                }
                 h1 { +"Qu'est-ce qu'un \"bon\" projet ?" }
                 section {
                     article {

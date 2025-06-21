@@ -1,17 +1,22 @@
 package com.sogilis.survey
 
 import io.ktor.client.*
-import io.ktor.client.engine.apache.*
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import kotlinx.serialization.Serializable
 
-fun Application.configureSecurity() {
-    authentication {
+fun Application.configureSecurity(httpClient: HttpClient = applicationHttpClient) {
+    install(Sessions) {
+        cookie<UserSession>("user_session")
+    }
+    val redirects = mutableMapOf<String, String>()
+    install(Authentication) {
         oauth("auth-oauth-google") {
+            // Configure oauth authentication
             urlProvider = { "http://localhost:8080/callback" }
             providerLookup = {
                 OAuthServerSettings.OAuth2ServerSettings(
@@ -21,25 +26,42 @@ fun Application.configureSecurity() {
                     requestMethod = HttpMethod.Post,
                     clientId = System.getenv("GOOGLE_CLIENT_ID"),
                     clientSecret = System.getenv("GOOGLE_CLIENT_SECRET"),
-                    defaultScopes = listOf("https://www.googleapis.com/auth/userinfo.profile")
+                    defaultScopes = listOf("https://www.googleapis.com/auth/userinfo.profile"),
+                    extraAuthParameters = listOf("access_type" to "offline"),
+                    onStateCreated = { call, state ->
+                        //saves new state with redirect url value
+                        call.request.queryParameters["redirectUrl"]?.let {
+                            redirects[state] = it
+                        }
+                    }
                 )
             }
-            client = HttpClient(Apache)
+            client = httpClient
         }
     }
     routing {
         authenticate("auth-oauth-google") {
-            get("login") {
-                call.respondRedirect("/callback")
+            get("/login") {
+                // Redirects to 'authorizeUrl' automatically
             }
 
             get("/callback") {
-                val principal: OAuthAccessTokenResponse.OAuth2? = call.authentication.principal()
-                call.sessions.set(UserSession(principal?.accessToken.toString()))
-                call.respondRedirect("/hello")
+                val currentPrincipal: OAuthAccessTokenResponse.OAuth2? = call.principal()
+                // redirects home if the url is not found before authorization
+                currentPrincipal?.let { principal ->
+                    principal.state?.let { state ->
+                        call.sessions.set(UserSession(state, principal.accessToken))
+                        redirects[state]?.let { redirect ->
+                            call.respondRedirect(redirect)
+                            return@get
+                        }
+                    }
+                }
+                call.respondRedirect("/home")
             }
         }
     }
 }
 
-class UserSession(accessToken: String)
+@Serializable
+data class UserSession(val state: String, val token: String)

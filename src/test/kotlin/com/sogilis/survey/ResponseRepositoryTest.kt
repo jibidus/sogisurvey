@@ -19,7 +19,7 @@ class ResponseRepositoryTest {
 
     @Test
     fun saveNewOne() {
-        ResponsesRepository(database.connection).saveNewOne()
+        ResponsesRepository(database.connection).saveNewOne("userName")
         database.connection.createStatement().use {
             val rs = it.executeQuery("SELECT COUNT(*) FROM sogisurvey.responses")
             rs.next()
