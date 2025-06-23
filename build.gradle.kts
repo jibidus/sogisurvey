@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.ktor)
-    kotlin("plugin.serialization") version "2.1.20"
+    alias(libs.plugins.kotlin.plugin.serialization)
 }
 
 group = "com.sogilis"
