@@ -7,7 +7,9 @@ import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.serialization.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.html.*
@@ -15,9 +17,12 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
+import io.ktor.util.logging.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.sql.Connection
+
+internal val LOGGER = KtorSimpleLogger("com.sogilis.survey.Routing")
 
 fun Application.configureRouting(connection: Connection, httpClient: HttpClient = applicationHttpClient) {
     val repository = ResponsesRepository(connection)
@@ -58,11 +63,18 @@ val applicationHttpClient = HttpClient(CIO) {
 suspend fun getPersonalGreeting(
     httpClient: HttpClient,
     userSession: UserSession
-): UserInfo = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
-    headers {
-        append(HttpHeaders.Authorization, "Bearer ${userSession.token}")
+): UserInfo {
+    val response = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
+        headers {
+            append(HttpHeaders.Authorization, "Bearer ${userSession.token}")
+        }
     }
-}.body()
+    try {
+        return response.body()
+    } catch (e: JsonConvertException) {
+        throw RuntimeException("Cannot read userinfo from following response:\n ${response.bodyAsText()}", e)
+    }
+}
 
 suspend fun getSession(
     call: ApplicationCall
@@ -88,5 +100,5 @@ data class UserInfo(
     @SerialName("given_name") val givenName: String,
     @SerialName("family_name") val familyName: String? = null,
     val picture: String,
-    val locale: String? = null
+    val locale: String? = null,
 )
