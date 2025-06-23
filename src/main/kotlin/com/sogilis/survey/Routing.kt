@@ -30,25 +30,27 @@ fun Application.configureRouting(connection: Connection, httpClient: HttpClient 
         get("/") {
             val userSession: UserSession? = getSession(call)
             if (userSession != null) {
-                val userInfo: UserInfo = getPersonalGreeting(httpClient, userSession)
-                call.respondHtml(block = homePage(currentUser = userInfo, currentUri = call.request.uri))
+                getPersonalGreeting(call, httpClient, userSession)?.let {
+                    call.respondHtml(block = homePage(currentUser = it, currentUri = call.request.uri))
+                }
             }
         }
         post("/") {
             val userSession: UserSession? = getSession(call)
             if (userSession != null) {
-                val userInfo: UserInfo = getPersonalGreeting(httpClient, userSession)
-                repository.saveNewOne(userInfo.name)
-                val responsesCount = repository.count()
-                call.respondHtml(block = submittedSurveyPage(responsesCount))
+                getPersonalGreeting(call, httpClient, userSession)?.let {
+                    repository.saveNewOne(it.name)
+                    val responsesCount = repository.count()
+                    call.respondHtml(block = submittedSurveyPage(responsesCount))
+                }
             }
         }
         get("/{path}") {
             val userSession: UserSession? = getSession(call)
             if (userSession != null) {
-                val userInfo: UserInfo =
-                    getPersonalGreeting(httpClient, userSession)
-                call.respondText("Hello, ${userInfo.name}!")
+                getPersonalGreeting(call, httpClient, userSession)?.let {
+                    call.respondText("Hello, ${it.name}!")
+                }
             }
         }
     }
@@ -61,18 +63,31 @@ val applicationHttpClient = HttpClient(CIO) {
 }
 
 suspend fun getPersonalGreeting(
+    call: ApplicationCall,
     httpClient: HttpClient,
     userSession: UserSession
-): UserInfo {
+): UserInfo? {
     val response = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
         headers {
             append(HttpHeaders.Authorization, "Bearer ${userSession.token}")
         }
     }
     try {
+        if (!response.status.isSuccess()) {
+            LOGGER.warn("Cannot read userinfo from https://www.googleapis.com/oauth2/v2/userinfo (response status ${response.status} is not success):\n ${response.bodyAsText()}")
+            val redirectUrl = URLBuilder("$baseUrl/login").run {
+                parameters.append("redirectUrl", call.request.uri)
+                build()
+            }
+            call.respondRedirect(redirectUrl)
+            return null
+        }
         return response.body()
     } catch (e: JsonConvertException) {
-        throw RuntimeException("Cannot read userinfo from following response:\n ${response.bodyAsText()}", e)
+        throw RuntimeException(
+            "Cannot read userinfo from responses returned by https://www.googleapis.com/oauth2/v2/userinfo:\n ${response.bodyAsText()}",
+            e
+        )
     }
 }
 
@@ -82,7 +97,7 @@ suspend fun getSession(
     val userSession: UserSession? = call.sessions.get()
     //if there is no session, redirect to login
     if (userSession == null) {
-        val redirectUrl = URLBuilder("http://localhost:8080/login").run {
+        val redirectUrl = URLBuilder("$baseUrl/login").run {
             parameters.append("redirectUrl", call.request.uri)
             build()
         }

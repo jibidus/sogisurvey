@@ -36,6 +36,7 @@ If the server starts successfully, you'll see the following output:
   `postgresql://localhost/test?user=fred&password=secret&ssl=true`)
 * `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variables (
   see [OAuth documentation](https://github.com/ktorio/ktor-documentation/tree/3.1.3/codeSnippets/snippets/auth-oauth-google))
+* `BASE_URL` (default is `http://localhost:8080`)
 
 ## Backlog
 

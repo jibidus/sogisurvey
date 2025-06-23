@@ -9,6 +9,8 @@ import io.ktor.server.routing.*
 import io.ktor.server.sessions.*
 import kotlinx.serialization.Serializable
 
+val baseUrl = (System.getenv("BASE_URL") ?: "http://localhost:8080")
+
 fun Application.configureSecurity(httpClient: HttpClient = applicationHttpClient) {
     install(Sessions) {
         cookie<UserSession>("user_session")
@@ -17,7 +19,7 @@ fun Application.configureSecurity(httpClient: HttpClient = applicationHttpClient
     install(Authentication) {
         oauth("auth-oauth-google") {
             // Configure oauth authentication
-            urlProvider = { "http://localhost:8080/callback" }
+            urlProvider = { "$baseUrl/callback" }
             providerLookup = {
                 OAuthServerSettings.OAuth2ServerSettings(
                     name = "google",
