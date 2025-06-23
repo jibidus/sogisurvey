@@ -8,6 +8,7 @@ import kotlinx.html.InputType.submit
 import kotlinx.html.InputType.text
 import kotlinx.html.a
 import kotlinx.html.article
+import kotlinx.html.b
 import kotlinx.html.body
 import kotlinx.html.footer
 import kotlinx.html.form
@@ -59,10 +60,15 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                                """.trimIndent()
                     }
                     article {
-                        +"""
-                Il vous est demandé ici d'évaluer les critères ci-dessous du <b>moins importants (à gauche)</b> au <b>plus important (à
-                droite)</b>. N'hésitez à pas mettre plus de détails dans les champs associés (ex : ???).
-                               """.trimIndent()
+                        +"Il vous est demandé ici d'évaluer les critères ci-dessous du "
+                        b {
+                            +"moins importants (à gauche)"
+                        }
+                        +" au "
+                        b {
+                            +"plus important (à droite)"
+                        }
+                        +". N'hésitez à pas mettre plus de détails dans les champs associés (ex : ???)"
                     }
                 }
             }
