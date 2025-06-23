@@ -57,7 +57,7 @@ fun Application.configureSecurity(httpClient: HttpClient = applicationHttpClient
                         }
                     }
                 }
-                call.respondRedirect("/home")
+                call.respondRedirect("/")
             }
         }
     }

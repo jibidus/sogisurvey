@@ -25,9 +25,8 @@ fun Application.configureRouting(connection: Connection, httpClient: HttpClient 
         get("/") {
             val userSession: UserSession? = getSession(call)
             if (userSession != null) {
-                println("Session found !")
                 val userInfo: UserInfo = getPersonalGreeting(httpClient, userSession)
-                call.respondHtml(block = homePage(userInfo.name))
+                call.respondHtml(block = homePage(currentUser = userInfo, currentUri = call.request.uri))
             }
         }
         post("/") {
@@ -56,7 +55,7 @@ val applicationHttpClient = HttpClient(CIO) {
     }
 }
 
-private suspend fun getPersonalGreeting(
+suspend fun getPersonalGreeting(
     httpClient: HttpClient,
     userSession: UserSession
 ): UserInfo = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
@@ -65,7 +64,7 @@ private suspend fun getPersonalGreeting(
     }
 }.body()
 
-private suspend fun getSession(
+suspend fun getSession(
     call: ApplicationCall
 ): UserSession? {
     val userSession: UserSession? = call.sessions.get()
