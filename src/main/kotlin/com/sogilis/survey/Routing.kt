@@ -59,14 +59,6 @@ fun Application.configureRouting(connection: Connection, httpClient: HttpClient 
                 }
             }
         }
-        get("/{path}") {
-            val userSession: UserSession? = getSession(call)
-            if (userSession != null) {
-                getPersonalGreeting(call, httpClient, userSession)?.let {
-                    call.respondText("Hello, ${it.name}!")
-                }
-            }
-        }
     }
 }
 
