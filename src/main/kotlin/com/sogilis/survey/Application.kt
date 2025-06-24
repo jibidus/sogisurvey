@@ -30,7 +30,7 @@ fun resetDatabase(connection: Connection) {
             DROP TABLE IF EXISTS sogisurvey.responses;
             CREATE TABLE IF NOT EXISTS sogisurvey.responses (
                 id SERIAL PRIMARY KEY,
-                author VARCHAR(255) NOT NULL,
+                author VARCHAR(255) NOT NULL UNIQUE,
                 comment TEXT
             );
             CREATE TABLE IF NOT EXISTS sogisurvey.priorities (
@@ -38,7 +38,8 @@ fun resetDatabase(connection: Connection) {
                 response_id INTEGER references sogisurvey.responses (id),
                 criterion_id VARCHAR(255) NOT NULL,
                 priority SMALLINT NOT NULL,
-                comment TEXT
+                comment TEXT,
+                UNIQUE(response_id, criterion_id)
             );
             """
             // TODO Add foreign key
