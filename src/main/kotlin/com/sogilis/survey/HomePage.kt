@@ -1,5 +1,6 @@
 package com.sogilis.com.sogilis.survey
 
+import com.sogilis.survey.CRITERIA
 import com.sogilis.survey.UserInfo
 import kotlinx.html.FormMethod
 import kotlinx.html.HTML
@@ -73,127 +74,13 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                 }
             }
             main(classes = "container") {
-                // add unique names to all inputs
-                label {
-                    +"Possibilité de travailler à distance (ex: chez moi ou depuis Sogilis)"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Plus de précision…"
-                        // aria-label="Détails"
-                    }
-                }
-
-
-                label {
-                    +"Confort de l'environnement de travail chez le client"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Plus de précision…"
-                    }
-                }
-                label {
-                    +"Faibles contraintes sur l'environnement de dev"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: choix de l'OS, possibilité d'utiliser les outils Sogilis…"
-                    }
-                }
-                label {
-                    +"Localisation du client"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: proche gare, à l'ouest de Grenoble…"
-                    }
-                }
-                label {
-                    +"Type de gestion de projet"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: Itérations, Scrum, XP…"
-                    }
-                }
-                label {
-                    +"Autonomie"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Plus de précision…"
-                    }
-                }
-                label {
-                    +"Durée de mission"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Longue ou courte, combien de mois/années …"
-                    }
-                }
-                label {
-                    +"Domaine métier"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: médical, éthique, IA…"
-                    }
-                }
-                label {
-                    +"Type de contrat"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: forfait, assistance Technique…"
-                    }
-                }
-                label {
-                    +"Base de code existante"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: partir de zéro, code existant de qualité, code legacy…"
-                    }
-                }
-                label {
-                    +"Contexte technique"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: front, web, mobile, embarqué, algo……"
-                    }
-                }
-                label {
-                    +"Language"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: language de haut niveau, language moderne…"
-                    }
-                }
-                label {
-                    +"Technos"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: React, Rails, Quarkus…"
-                    }
-                }
-                label {
-                    +"La mission me fait progresser rapidement"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Ex: techniquement, en pratiques, en compétences humaines…"
-                    }
-                }
-                label {
-                    +"Ambiance humaine"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Plus de précision…"
-                    }
-                }
-                label {
-                    +"Pouvoir travailler en équipe Sogilis"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Plus de précision…"
-                    }
-                }
-                label {
-                    +"Le client souhaite s'améliorer en continue"
-                    input(type = range, name = "range")
-                    input(type = text, name = "details") {
-                        placeholder = "Plus de précision…"
+                CRITERIA.forEach {
+                    label {
+                        +it.title
+                        input(type = range, name = it.id)
+                        input(type = text, name = it.commentId) {
+                            placeholder = it.commentPlaceholder
+                        }
                     }
                 }
 
