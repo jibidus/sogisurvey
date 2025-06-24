@@ -39,7 +39,15 @@ fun Application.configureRouting(connection: Connection, httpClient: HttpClient 
             val userSession: UserSession? = getSession(call)
             if (userSession != null) {
                 getPersonalGreeting(call, httpClient, userSession)?.let {
-                    repository.saveNewOne(it.name)
+                    val values = call.receiveParameters()
+                    val responses = CRITERIA.map { criterion ->
+                        Priority(
+                            criterionId = criterion.id,
+                            value = values[criterion.id]!!.toInt(),
+                            comment = values[criterion.commentId]
+                        )
+                    }.toSet()
+                    repository.save(Response(it.name, responses))
                     val responsesCount = repository.count()
                     call.respondHtml(block = submittedSurveyPage(responsesCount))
                 }

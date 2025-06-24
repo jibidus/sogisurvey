@@ -15,17 +15,37 @@ class ResponseRepositoryTest {
     }
 
     @BeforeEach
-    fun setupDb() = setupDatabase(database.connection)
+    fun setupDb() = resetDatabase(database.connection)
+
+    private val repository = ResponsesRepository(database.connection)
 
     @Test
-    fun saveNewOne() {
-        ResponsesRepository(database.connection).saveNewOne("userName")
-        database.connection.createStatement().use {
-            val rs = it.executeQuery("SELECT COUNT(*) FROM sogisurvey.responses")
-            rs.next()
-            val count = rs.getInt(1)
-            Assertions.assertEquals(1, count)
-        }
+    fun save() {
+        val response = Response(
+            author = "author", priorities = setOf(
+                Priority(
+                    criterionId = "A",
+                    value = 50,
+                    comment = "test comment"
+                )
+            )
+        )
+        repository.save(response)
+        Assertions.assertEquals(1, repository.count())
     }
 
+    @Test
+    fun `save() without command`() {
+        val response = Response(
+            author = "author", priorities = setOf(
+                Priority(
+                    criterionId = "A",
+                    value = 50,
+                    comment = null
+                )
+            )
+        )
+        repository.save(response)
+        Assertions.assertEquals(1, repository.count())
+    }
 }

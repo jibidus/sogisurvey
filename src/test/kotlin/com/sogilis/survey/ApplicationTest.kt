@@ -3,7 +3,7 @@ package com.sogilis.com.sogilis.survey
 
 import com.sogilis.survey.DbExtension
 import com.sogilis.survey.installModules
-import com.sogilis.survey.setupDatabase
+import com.sogilis.survey.resetDatabase
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -25,7 +25,7 @@ class ApplicationTest {
     fun home() = testApplication {
         application {
             installModules(database.connection)
-            setupDatabase(database.connection)
+            resetDatabase(database.connection)
         }
         val response = client.get("/")
         assertEquals(HttpStatusCode.OK, response.status)
@@ -36,7 +36,7 @@ class ApplicationTest {
     fun submittedSurvey() = testApplication {
         application {
             installModules(database.connection)
-            setupDatabase(database.connection)
+            resetDatabase(database.connection)
         }
         val response = client.post("/")
         assertEquals(HttpStatusCode.OK, response.status)
