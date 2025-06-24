@@ -85,7 +85,7 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                 }
 
                 textArea {
-                    name = "comments"
+                    name = "global-comments"
                     placeholder = "Commentaires"
                 }
             }

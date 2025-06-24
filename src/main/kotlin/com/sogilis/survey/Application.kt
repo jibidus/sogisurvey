@@ -26,15 +26,23 @@ fun resetDatabase(connection: Connection) {
         stmt.execute(
             """
             CREATE SCHEMA IF NOT EXISTS sogisurvey;
+            DROP TABLE IF EXISTS sogisurvey.priorities;
             DROP TABLE IF EXISTS sogisurvey.responses;
             CREATE TABLE IF NOT EXISTS sogisurvey.responses (
                 id SERIAL PRIMARY KEY,
                 author VARCHAR(255) NOT NULL,
-                criterion VARCHAR(255) NOT NULL,
+                comment TEXT
+            );
+            CREATE TABLE IF NOT EXISTS sogisurvey.priorities (
+                id SERIAL PRIMARY KEY,
+                response_id INTEGER references sogisurvey.responses (id),
+                criterion_id VARCHAR(255) NOT NULL,
                 priority SMALLINT NOT NULL,
                 comment TEXT
             );
             """
+            // TODO Add foreign key
+            // TODO Add response date
         )
     }
 }

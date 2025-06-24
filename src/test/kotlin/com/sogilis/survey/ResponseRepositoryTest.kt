@@ -22,13 +22,15 @@ class ResponseRepositoryTest {
     @Test
     fun save() {
         val response = Response(
-            author = "author", priorities = setOf(
+            author = "author",
+            priorities = setOf(
                 Priority(
                     criterionId = "A",
                     value = 50,
                     comment = "test comment"
                 )
-            )
+            ),
+            comment = "global comments",
         )
         repository.save(response)
         Assertions.assertEquals(1, repository.count())
@@ -37,13 +39,15 @@ class ResponseRepositoryTest {
     @Test
     fun `save() without command`() {
         val response = Response(
-            author = "author", priorities = setOf(
+            author = "author",
+            priorities = setOf(
                 Priority(
                     criterionId = "A",
                     value = 50,
                     comment = null
                 )
-            )
+            ),
+            comment = "global comments",
         )
         repository.save(response)
         Assertions.assertEquals(1, repository.count())

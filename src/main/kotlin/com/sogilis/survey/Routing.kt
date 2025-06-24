@@ -47,7 +47,13 @@ fun Application.configureRouting(connection: Connection, httpClient: HttpClient 
                             comment = values[criterion.commentId]
                         )
                     }.toSet()
-                    repository.save(Response(it.name, responses))
+                    repository.save(
+                        Response(
+                            author = it.name,
+                            priorities = responses,
+                            comment = values["global-comments"]
+                        )
+                    )
                     val responsesCount = repository.count()
                     call.respondHtml(block = submittedSurveyPage(responsesCount))
                 }
