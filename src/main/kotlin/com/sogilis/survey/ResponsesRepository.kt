@@ -12,6 +12,15 @@ class ResponsesRepository(val conn: Connection) {
     fun save(response: Response) {
         // TODO: prevent sql injection
         conn.createStatement().use {
+            
+            it.execute(
+                """
+                DELETE FROM sogisurvey.priorities
+                WHERE response_id = (SELECT id FROM sogisurvey.responses WHERE author = '${response.author}');
+                DELETE FROM sogisurvey.responses WHERE author = '${response.author}';
+            """.trimIndent()
+            )
+
             val rs = it.executeQuery(
                 """
                       INSERT INTO sogisurvey.responses

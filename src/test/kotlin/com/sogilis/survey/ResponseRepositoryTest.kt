@@ -52,4 +52,22 @@ class ResponseRepositoryTest {
         repository.save(response)
         Assertions.assertEquals(1, repository.count())
     }
+
+    @Test
+    fun `save() override previous result`() {
+        val response = Response(
+            author = "author",
+            priorities = setOf(
+                Priority(
+                    criterionId = "A",
+                    value = 50,
+                    comment = "test comment"
+                )
+            ),
+            comment = "global comments",
+        )
+        repository.save(response)
+        repository.save(response)
+        Assertions.assertEquals(1, repository.count())
+    }
 }
