@@ -39,6 +39,7 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
             // https://developers.google.com/identity/branding-guidelines
             style = "display: flex; justify-content: flex-end;"
             a(href = "https://accounts.google.com/AccountChooser", classes = "secondary") {
+                style = "margin-right: 2rem;"
                 attributes.put("data-tooltip", "Utilisateur connecté: ${currentUser.name}")
                 attributes.put("data-placement", "left")
                 img {
@@ -76,6 +77,7 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
             main(classes = "container") {
                 CRITERIA.forEach {
                     label {
+                        style = "margin-bottom: 2rem;"
                         +it.title
                         input(type = range, name = it.id)
                         input(type = text, name = it.commentId) {
