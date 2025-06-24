@@ -15,6 +15,10 @@ val CRITERIA = listOf(
         commentPlaceholder = "Ex: proche gare, à l'ouest de Grenoble…"
     ),
     CriterionInput(
+        id = "remote", title = "Travail à distance",
+        commentPlaceholder = "Plus de précision…"
+    ),
+    CriterionInput(
         id = "duree-mission", title = "Durée de mission",
         commentPlaceholder = "Longue ou courte, combien de mois/années …"
     ),
