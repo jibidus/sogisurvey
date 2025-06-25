@@ -57,3 +57,7 @@ tasks.withType<JavaCompile>().configureEach {
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget = JVM_21
 }
+
+tasks {
+    create("stage").dependsOn("installDist")
+}
