@@ -1,11 +1,6 @@
 # survey
 
-Public url: https://sogisurvey.onrender.com
-
-* Pico CSS: https://picocss.com/docs/
-* Add labels to range
-  input: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/range#adding_labels
-* Ktor + OAUth: https://github.com/ktorio/ktor-documentation/tree/3.1.3/codeSnippets/snippets/auth-oauth-google
+Public url: https://sogisurvey-c2bd9e6f4c04.herokuapp.com/
 
 ## Building & Running
 
@@ -38,8 +33,13 @@ If the server starts successfully, you'll see the following output:
   see [OAuth documentation](https://github.com/ktorio/ktor-documentation/tree/3.1.3/codeSnippets/snippets/auth-oauth-google))
 * `BASE_URL` (default is `http://localhost:8080`)
 
+## Documentation
+
+* Pico CSS: https://picocss.com/docs/
+* Add labels to range
+  input: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input/range#adding_labels
+* Ktor + OAUth: https://github.com/ktorio/ktor-documentation/tree/3.1.3/codeSnippets/snippets/auth-oauth-google
+
 ## Backlog
 
-* logout
-* access when log logged in (refresh page after logging out from another page)
-* access when already logged in
+* when change user, redirect to home page
