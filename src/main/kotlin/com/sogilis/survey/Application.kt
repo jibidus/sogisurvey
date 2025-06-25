@@ -26,8 +26,6 @@ fun resetDatabase(connection: Connection) {
         stmt.execute(
             """
             CREATE SCHEMA IF NOT EXISTS sogisurvey;
-            DROP TABLE IF EXISTS sogisurvey.priorities;
-            DROP TABLE IF EXISTS sogisurvey.responses;
             CREATE TABLE IF NOT EXISTS sogisurvey.responses (
                 id SERIAL PRIMARY KEY,
                 author VARCHAR(255) NOT NULL UNIQUE,
