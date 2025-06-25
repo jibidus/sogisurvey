@@ -111,15 +111,15 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                 }
             }
             main(classes = "container") {
-                CRITERIA.forEach {
+                CRITERIA.forEachIndexed { index, criterion ->
                     label {
                         style = "margin-bottom: 2rem;"
-                        +"${it.title} :"
-                        input(type = range, name = it.id) {
-                            list = "values-for-${it.id}"
+                        +"${index + 1} - ${criterion.title} :"
+                        input(type = range, name = criterion.id) {
+                            list = "values-for-${criterion.id}"
                         }
                         dataList {
-                            id = "values-for-${it.id}"
+                            id = "values-for-${criterion.id}"
                             option {
                                 value = "0"
                                 label = "Peu important"
@@ -129,8 +129,8 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                                 label = "Très important"
                             }
                         }
-                        input(type = text, name = it.commentId) {
-                            placeholder = it.commentPlaceholder
+                        input(type = text, name = criterion.commentId) {
+                            placeholder = criterion.commentPlaceholder
                         }
                     }
                 }
