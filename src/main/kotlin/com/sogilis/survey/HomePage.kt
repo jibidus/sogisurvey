@@ -17,6 +17,7 @@ import kotlinx.html.form
 import kotlinx.html.h1
 import kotlinx.html.head
 import kotlinx.html.header
+import kotlinx.html.hr
 import kotlinx.html.id
 import kotlinx.html.img
 import kotlinx.html.input
@@ -98,8 +99,7 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                 projet/mission. Ainsi, dans un second temps, nous pourons voir comment améliorer l'adéquation entre ces attentes et les projets identifiés par l'équipe commerciale.
                 Biensûr tout ne sera pas possible, certaines contraintes comme la situation du marché actuel seront nos limitantes. Mais commençons par essayer.                                   
                                """.trimIndent()
-                    }
-                    article {
+                        hr {}
                         +"Il vous est demandé ici d'évaluer une liste de critères du "
                         b {
                             +"moins importants"
@@ -109,9 +109,10 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                             +"plus important"
                         }
                         +" pour vous. N'hésitez à pas remplir les champs libres afin que l'on puisse cerner au mieux vos attentes."
-                    }
-                    article {
+                        hr {}
                         +"Dernière chose, c'est principalement l'ordre relatif des critères compte, c'est pour cela qu'il n'y a pas d'échelle."
+                        hr {}
+                        +"L'équipe CSE."
                     }
                 }
             }
