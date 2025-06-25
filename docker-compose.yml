@@ -11,7 +11,7 @@ services:
       - db:db
     environment:
       PORT: 8080
-      DATABASE_URL: postgresql://db/?user=postgres&password=postgres&ssl=false&port=5432
+      JDBC_DATABASE_URL: jdbc:postgresql://db/?user=postgres&password=postgres&ssl=false&port=5432
     command: ./wait-for-it.sh -t 40 db:5432 -- java -jar /app/sogisurvey.jar
   db:
     image: postgres:13.5

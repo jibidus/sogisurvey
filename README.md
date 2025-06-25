@@ -32,8 +32,8 @@ If the server starts successfully, you'll see the following output:
 ## Infrastructure requirements
 
 * Java 21
-* `DATABASE_URL` environment variables to postgres database (ex:
-  `postgresql://localhost/test?user=fred&password=secret&ssl=true`)
+* `JDBC_DATABASE_URL` environment variables to postgres database (ex:
+  `jdbc:postgresql://localhost/test?user=fred&password=secret&ssl=true`)
 * `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variables (
   see [OAuth documentation](https://github.com/ktorio/ktor-documentation/tree/3.1.3/codeSnippets/snippets/auth-oauth-google))
 * `BASE_URL` (default is `http://localhost:8080`)
