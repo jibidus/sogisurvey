@@ -100,7 +100,7 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                                """.trimIndent()
                     }
                     article {
-                        +"Il vous est demandé ici d'évaluer les critères ci-dessous du "
+                        +"Il vous est demandé ici d'évaluer une liste de critères du "
                         b {
                             +"moins importants"
                         }
@@ -108,10 +108,10 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                         b {
                             +"plus important"
                         }
-                        +" pour vous. N'hésitez à pas remplir les champs libres afin que cerner au mieux vos attentes."
+                        +" pour vous. N'hésitez à pas remplir les champs libres afin que l'on puisse cerner au mieux vos attentes."
                     }
                     article {
-                        +"Dernière chose, c'est l'importance relative des critères qui importent, pas la valeur absolue, donc ne vous prenez pas la tête pour remplir ce formulaire."
+                        +"Dernière chose, c'est principalement l'ordre relatif des critères compte, c'est pour cela qu'il n'y a pas d'échelle."
                     }
                 }
             }
