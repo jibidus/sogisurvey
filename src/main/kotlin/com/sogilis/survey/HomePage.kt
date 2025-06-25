@@ -30,6 +30,7 @@ import kotlinx.html.style
 import kotlinx.html.textArea
 import kotlinx.html.title
 
+// TODO Use CSS DSL (see https://ktor.io/docs/server-css-dsl.html)
 fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
     head {
         meta(charset = "UTF-8")
