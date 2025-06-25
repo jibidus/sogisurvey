@@ -26,6 +26,7 @@ import kotlinx.html.main
 import kotlinx.html.meta
 import kotlinx.html.option
 import kotlinx.html.section
+import kotlinx.html.span
 import kotlinx.html.style
 import kotlinx.html.textArea
 import kotlinx.html.title
@@ -39,6 +40,10 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
         link(href = "https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css", rel = "stylesheet")
         style {
             +"""
+              .criterion-ordinal {
+                color: var(--pico-muted-color);
+              }
+              
               input[type='range'] {
                 margin-bottom: 0rem;
               }
@@ -114,7 +119,12 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                 CRITERIA.forEachIndexed { index, criterion ->
                     label {
                         style = "margin-bottom: 2rem;"
-                        +"${index + 1} - ${criterion.title} :"
+                        span(classes = "criterion-ordinal") {
+                            +"${index + 1} - "
+                        }
+                        span {
+                            +"${criterion.title} :"
+                        }
                         input(type = range, name = criterion.id) {
                             list = "values-for-${criterion.id}"
                         }
