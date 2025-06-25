@@ -110,7 +110,7 @@ fun homePage(currentUser: UserInfo, currentUri: String): HTML.() -> Unit = {
                         }
                         +" pour vous. N'hésitez à pas remplir les champs libres afin que l'on puisse cerner au mieux vos attentes."
                         hr {}
-                        +"Dernière chose, c'est principalement l'ordre relatif des critères compte, c'est pour cela qu'il n'y a pas d'échelle."
+                        +"Dernière chose, c'est principalement l'ordre relatif des critères qui compte, c'est pour cela qu'il n'y a pas d'échelle."
                         hr {}
                         +"L'équipe CSE."
                     }
