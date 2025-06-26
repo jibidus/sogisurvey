@@ -54,6 +54,7 @@ fun Application.configureRouting(connection: Connection, httpClient: HttpClient 
                             comment = values["global-comments"]
                         )
                     )
+                    log.info("${it.name} a répondu au sondage 🎉")
                     val responsesCount = repository.count()
                     call.respondHtml(block = submittedSurveyPage(responsesCount))
                 }
