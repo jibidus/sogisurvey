@@ -1,7 +1,7 @@
 package com.sogilis.survey
 
-import com.sogilis.survey.Database.Priorities
-import com.sogilis.survey.Database.Responses
+import com.sogilis.survey.Database.PRIORITIES
+import com.sogilis.survey.Database.RESPONSES
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
 import java.sql.Connection
@@ -14,7 +14,7 @@ class ResponsesRepository(
     fun count(): Int =
         dsl
             .selectCount()
-            .from(Responses.table)
+            .from(RESPONSES.table)
             .fetchOne()!!
             .value1()
 
@@ -22,39 +22,39 @@ class ResponsesRepository(
         dsl.transaction { tx ->
             tx
                 .dsl()
-                .delete(Priorities.table)
+                .delete(PRIORITIES.table)
                 .where(
-                    Priorities.responseId.`in`(
+                    PRIORITIES.RESPONSE_ID.`in`(
                         tx
                             .dsl()
-                            .select(Responses.id)
-                            .from(Responses.table)
-                            .where(Responses.author.equal(response.author)),
+                            .select(RESPONSES.ID)
+                            .from(RESPONSES.table)
+                            .where(RESPONSES.AUTHOR.equal(response.author)),
                     ),
                 ).execute()
 
             tx
                 .dsl()
-                .delete(Responses.table)
-                .where(Responses.author.equal(response.author))
+                .delete(RESPONSES.table)
+                .where(RESPONSES.AUTHOR.equal(response.author))
                 .execute()
 
             val responseId =
                 tx
                     .dsl()
-                    .insertInto(Responses.table, Responses.author, Responses.comment)
+                    .insertInto(RESPONSES.table, RESPONSES.AUTHOR, RESPONSES.COMMENT)
                     .values(response.author, response.comment)
-                    .returning(Responses.id)
+                    .returning(RESPONSES.ID)
                     .fetchOne()!!
-                    .getValue(Responses.id)
+                    .getValue(RESPONSES.ID)
 
             val insert =
                 tx.dsl().insertInto(
-                    Priorities.table,
-                    Priorities.responseId,
-                    Priorities.criterionId,
-                    Priorities.priority,
-                    Priorities.comment,
+                    PRIORITIES.table,
+                    PRIORITIES.RESPONSE_ID,
+                    PRIORITIES.CRITERION_ID,
+                    PRIORITIES.PRIORITY,
+                    PRIORITIES.COMMENT,
                 )
             response.priorities.forEach {
                 insert.values(responseId, it.criterionId, it.value, it.comment)

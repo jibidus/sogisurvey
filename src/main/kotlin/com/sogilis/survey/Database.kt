@@ -8,18 +8,18 @@ object Database {
         System.setProperty("org.jooq.no-logo", "true")
     }
 
-    object Responses {
+    object RESPONSES {
         val table = DSL.table("sogisurvey.responses")
-        val id = field("id")
-        val author = field("author")
-        val comment = field("comment")
+        val ID = field("id")
+        val AUTHOR = field("author")
+        val COMMENT = field("comment")
     }
 
-    object Priorities {
+    object PRIORITIES {
         val table = DSL.table("sogisurvey.priorities")
-        val responseId = field("response_id")
-        val criterionId = field("criterion_id")
-        val priority = field("priority")
-        val comment = field("comment")
+        val RESPONSE_ID = field("response_id")
+        val CRITERION_ID = field("criterion_id")
+        val PRIORITY = field("priority")
+        val COMMENT = field("comment")
     }
 }
