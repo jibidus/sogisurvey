@@ -14,6 +14,7 @@ class ResponsesRepository(
 
     fun save(response: Response) {
         // TODO: prevent sql injection
+        // TODO: add transaction
         conn.createStatement().use {
             it.execute(
                 """

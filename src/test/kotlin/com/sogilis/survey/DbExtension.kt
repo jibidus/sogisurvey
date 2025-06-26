@@ -1,5 +1,9 @@
 package com.sogilis.survey
 
+import com.sogilis.survey.ResponseRepositoryTest.Companion.database
+import org.jooq.DSLContext
+import org.jooq.SQLDialect
+import org.jooq.impl.DSL
 import org.junit.jupiter.api.extension.AfterAllCallback
 import org.junit.jupiter.api.extension.BeforeAllCallback
 import org.junit.jupiter.api.extension.ExtensionContext
@@ -13,9 +17,10 @@ class DbExtension :
     private lateinit var postgresContainer: PostgreSQLContainer<*>
     lateinit var connection: Connection
     lateinit var repository: ResponsesRepository
+    lateinit var dsl: DSLContext
 
     override fun beforeAll(context: ExtensionContext?) {
-        postgresContainer = PostgreSQLContainer<Nothing>("postgres:16-alpine")
+        postgresContainer = PostgreSQLContainer<Nothing>("postgres:17-alpine")
         postgresContainer.start()
         connection =
             DriverManager.getConnection(
@@ -24,6 +29,7 @@ class DbExtension :
                 postgresContainer.password,
             )
         repository = ResponsesRepository(connection)
+        dsl = DSL.using(database.connection, SQLDialect.POSTGRES)
     }
 
     override fun afterAll(context: ExtensionContext?) {

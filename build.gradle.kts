@@ -33,6 +33,8 @@ dependencies {
     implementation(libs.logback.classic)
     implementation(libs.ktor.server.config.yaml)
     implementation(libs.postgresql)
+    implementation(libs.jooq)
+    implementation(libs.jooq.kotlin)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(platform("org.junit:junit-bom:5.13.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
