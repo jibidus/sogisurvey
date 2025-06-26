@@ -12,7 +12,7 @@ class ResponsesRepository(val conn: Connection) {
     fun save(response: Response) {
         // TODO: prevent sql injection
         conn.createStatement().use {
-            
+
             it.execute(
                 """
                 DELETE FROM sogisurvey.priorities
@@ -49,5 +49,5 @@ class ResponsesRepository(val conn: Connection) {
 fun String?.toSQL() = if (this == null || this.isBlank()) {
     "NULL"
 } else {
-    "'$this'"
+    "'${replace("'", "''")}'"
 }
