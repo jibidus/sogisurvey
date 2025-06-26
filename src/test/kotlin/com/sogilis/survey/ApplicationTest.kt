@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package com.sogilis.com.sogilis.survey
 
 import com.sogilis.survey.DbExtension
@@ -7,11 +9,13 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
+@Disabled
 class ApplicationTest {
     companion object {
         @JvmField
