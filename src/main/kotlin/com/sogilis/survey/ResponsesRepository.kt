@@ -1,60 +1,60 @@
 package com.sogilis.survey
 
+import com.sogilis.survey.Database.Priorities
+import com.sogilis.survey.Database.Responses
+import org.jooq.SQLDialect
+import org.jooq.impl.DSL
 import java.sql.Connection
 
 class ResponsesRepository(
     val conn: Connection,
 ) {
+    private val dsl = DSL.using(conn, SQLDialect.POSTGRES)
+
     fun count(): Int =
-        conn.createStatement().use {
-            val rs = it.executeQuery("SELECT COUNT(id) FROM sogisurvey.responses")
-            rs.next()
-            rs.getInt(1)
-        }
+        dsl
+            .selectCount()
+            .from(Responses.table)
+            .fetch()
+            .single()
+            .value1()
 
     fun save(response: Response) {
-        // TODO: prevent sql injection
-        // TODO: add transaction
-        conn.createStatement().use {
-            it.execute(
-                """
-                DELETE FROM sogisurvey.priorities
-                WHERE response_id = (SELECT id FROM sogisurvey.responses WHERE author = '${response.author}');
-                DELETE FROM sogisurvey.responses WHERE author = '${response.author}';
-                """.trimIndent(),
+        dsl
+            .delete(Priorities.table)
+            .where(
+                Priorities.responseId.`in`(
+                    dsl
+                        .select(Responses.id)
+                        .from(Responses.table)
+                        .where(Responses.author.equal(response.author)),
+                ),
+            ).execute()
+
+        dsl
+            .delete(Responses.table)
+            .where(Responses.author.equal(response.author))
+            .execute()
+
+        val responseId =
+            dsl
+                .insertInto(Responses.table, Responses.author, Responses.comment)
+                .values(response.author, response.comment)
+                .returning(Responses.id)
+                .fetchOne()!!
+                .getValue(Responses.id)
+
+        val insert =
+            dsl.insertInto(
+                Priorities.table,
+                Priorities.responseId,
+                Priorities.criterionId,
+                Priorities.priority,
+                Priorities.comment,
             )
-
-            val rs =
-                it.executeQuery(
-                    """
-                    INSERT INTO sogisurvey.responses
-                    (author, comment)
-                    VALUES
-                    ('${response.author}', ${response.comment.toSQL()})
-                    RETURNING id
-                    """.trimIndent(),
-                )
-            rs.next()
-            val responseId = rs.getInt(1)
-
-            val insertInto =
-                """
-                INSERT INTO sogisurvey.priorities
-                (response_id, criterion_id, priority, comment)
-                VALUES
-                """.trimIndent()
-            val values =
-                response.priorities.joinToString(", ") { priority ->
-                    "($responseId, '${priority.criterionId}', ${priority.value}, ${priority.comment.toSQL()})"
-                }
-            it.execute(insertInto + values)
+        response.priorities.forEach {
+            insert.values(responseId, it.criterionId, it.value, it.comment)
         }
+        insert.execute()
     }
 }
-
-fun String?.toSQL() =
-    if (this == null || this.isBlank()) {
-        "NULL"
-    } else {
-        "'${replace("'", "''")}'"
-    }

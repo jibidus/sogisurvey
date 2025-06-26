@@ -1,5 +1,7 @@
 package com.sogilis.survey
 
+import com.sogilis.survey.Database.Priorities
+import com.sogilis.survey.Database.Responses
 import org.jooq.impl.DSL.count
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -94,16 +96,16 @@ class ResponsesRepositoryTest {
         repository.save(response)
         val storedGlobalComment =
             database.dsl
-                .select(ResponsesTable.comment)
-                .from(ResponsesTable.NAME)
+                .select(Responses.comment)
+                .from(Responses.table)
                 .fetch()
                 .single()
                 .value1()
         assertEquals("global ' comment", storedGlobalComment)
         val storedPriorityComment =
             database.dsl
-                .select(PrioritiesTable.comment)
-                .from(PrioritiesTable.NAME)
+                .select(Priorities.comment)
+                .from(Priorities.table)
                 .fetch()
                 .single()
                 .value1()
@@ -134,7 +136,7 @@ class ResponsesRepositoryTest {
         val prioritiesCount =
             database.dsl
                 .select(count())
-                .from(PrioritiesTable.NAME)
+                .from(Priorities.table)
                 .fetch()
                 .single()
                 .value1()
