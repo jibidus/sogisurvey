@@ -4,6 +4,10 @@ import org.jooq.impl.DSL
 import org.jooq.impl.DSL.field
 
 object Database {
+    init {
+        System.setProperty("org.jooq.no-logo", "true")
+    }
+
     object Responses {
         val table = DSL.table("sogisurvey.responses")
         val id = field("id")
