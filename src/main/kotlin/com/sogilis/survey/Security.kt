@@ -31,11 +31,11 @@ fun Application.configureSecurity(httpClient: HttpClient = applicationHttpClient
                     defaultScopes = listOf("https://www.googleapis.com/auth/userinfo.profile"),
                     extraAuthParameters = listOf("access_type" to "offline"),
                     onStateCreated = { call, state ->
-                        //saves new state with redirect url value
+                        // saves new state with redirect url value
                         call.request.queryParameters["redirectUrl"]?.let {
                             redirects[state] = it
                         }
-                    }
+                    },
                 )
             }
             client = httpClient
@@ -66,4 +66,7 @@ fun Application.configureSecurity(httpClient: HttpClient = applicationHttpClient
 }
 
 @Serializable
-data class UserSession(val state: String, val token: String)
+data class UserSession(
+    val state: String,
+    val token: String,
+)

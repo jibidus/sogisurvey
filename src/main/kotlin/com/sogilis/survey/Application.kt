@@ -39,7 +39,7 @@ fun resetDatabase(connection: Connection) {
                 comment TEXT,
                 UNIQUE(response_id, criterion_id)
             );
-            """
+            """,
             // TODO Add foreign key
             // TODO Add response date
         )

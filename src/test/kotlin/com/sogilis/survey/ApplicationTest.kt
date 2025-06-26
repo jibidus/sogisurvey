@@ -1,6 +1,5 @@
 package com.sogilis.com.sogilis.survey
 
-
 import com.sogilis.survey.DbExtension
 import com.sogilis.survey.installModules
 import com.sogilis.survey.resetDatabase
@@ -14,7 +13,6 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 
 class ApplicationTest {
-
     companion object {
         @JvmField
         @RegisterExtension
@@ -22,24 +20,26 @@ class ApplicationTest {
     }
 
     @Test
-    fun home() = testApplication {
-        application {
-            installModules(database.connection)
-            resetDatabase(database.connection)
+    fun home() =
+        testApplication {
+            application {
+                installModules(database.connection)
+                resetDatabase(database.connection)
+            }
+            val response = client.get("/")
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertContains(response.bodyAsText(), "Sondage")
         }
-        val response = client.get("/")
-        assertEquals(HttpStatusCode.OK, response.status)
-        assertContains(response.bodyAsText(), "Sondage")
-    }
 
     @Test
-    fun submittedSurvey() = testApplication {
-        application {
-            installModules(database.connection)
-            resetDatabase(database.connection)
+    fun submittedSurvey() =
+        testApplication {
+            application {
+                installModules(database.connection)
+                resetDatabase(database.connection)
+            }
+            val response = client.post("/")
+            assertEquals(HttpStatusCode.OK, response.status)
+            assertContains(response.bodyAsText(), "1 réponse(s) enregistrée(s)")
         }
-        val response = client.post("/")
-        assertEquals(HttpStatusCode.OK, response.status)
-        assertContains(response.bodyAsText(), "1 réponse(s) enregistrée(s)")
-    }
 }

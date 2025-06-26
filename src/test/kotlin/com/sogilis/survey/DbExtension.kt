@@ -7,8 +7,9 @@ import org.testcontainers.containers.PostgreSQLContainer
 import java.sql.Connection
 import java.sql.DriverManager
 
-class DbExtension : BeforeAllCallback, AfterAllCallback {
-
+class DbExtension :
+    BeforeAllCallback,
+    AfterAllCallback {
     private lateinit var postgresContainer: PostgreSQLContainer<*>
     lateinit var connection: Connection
     lateinit var repository: ResponsesRepository
@@ -16,11 +17,12 @@ class DbExtension : BeforeAllCallback, AfterAllCallback {
     override fun beforeAll(context: ExtensionContext?) {
         postgresContainer = PostgreSQLContainer<Nothing>("postgres:16-alpine")
         postgresContainer.start()
-        connection = DriverManager.getConnection(
-            postgresContainer.jdbcUrl,
-            postgresContainer.username,
-            postgresContainer.password
-        )
+        connection =
+            DriverManager.getConnection(
+                postgresContainer.jdbcUrl,
+                postgresContainer.username,
+                postgresContainer.password,
+            )
         repository = ResponsesRepository(connection)
     }
 

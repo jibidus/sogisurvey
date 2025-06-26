@@ -24,7 +24,10 @@ import java.sql.Connection
 
 internal val LOGGER = KtorSimpleLogger("com.sogilis.survey.Routing")
 
-fun Application.configureRouting(connection: Connection, httpClient: HttpClient = applicationHttpClient) {
+fun Application.configureRouting(
+    connection: Connection,
+    httpClient: HttpClient = applicationHttpClient,
+) {
     val repository = ResponsesRepository(connection)
     routing {
         get("/") {
@@ -40,19 +43,21 @@ fun Application.configureRouting(connection: Connection, httpClient: HttpClient 
             if (userSession != null) {
                 getPersonalGreeting(call, httpClient, userSession)?.let {
                     val values = call.receiveParameters()
-                    val responses = CRITERIA.map { criterion ->
-                        Priority(
-                            criterionId = criterion.id,
-                            value = values[criterion.id]!!.toInt(),
-                            comment = values[criterion.commentId]
-                        )
-                    }.toSet()
+                    val responses =
+                        CRITERIA
+                            .map { criterion ->
+                                Priority(
+                                    criterionId = criterion.id,
+                                    value = values[criterion.id]!!.toInt(),
+                                    comment = values[criterion.commentId],
+                                )
+                            }.toSet()
                     repository.save(
                         Response(
                             author = it.name,
                             priorities = responses,
-                            comment = values["global-comments"]
-                        )
+                            comment = values["global-comments"],
+                        ),
                     )
                     log.info("${it.name} a répondu au sondage 🎉")
                     val responsesCount = repository.count()
@@ -63,29 +68,34 @@ fun Application.configureRouting(connection: Connection, httpClient: HttpClient 
     }
 }
 
-val applicationHttpClient = HttpClient(CIO) {
-    install(ContentNegotiation) {
-        json()
+val applicationHttpClient =
+    HttpClient(CIO) {
+        install(ContentNegotiation) {
+            json()
+        }
     }
-}
 
 suspend fun getPersonalGreeting(
     call: ApplicationCall,
     httpClient: HttpClient,
-    userSession: UserSession
+    userSession: UserSession,
 ): UserInfo? {
-    val response = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
-        headers {
-            append(HttpHeaders.Authorization, "Bearer ${userSession.token}")
+    val response =
+        httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
+            headers {
+                append(HttpHeaders.Authorization, "Bearer ${userSession.token}")
+            }
         }
-    }
     try {
         if (!response.status.isSuccess()) {
-            LOGGER.warn("Cannot read userinfo from https://www.googleapis.com/oauth2/v2/userinfo (response status ${response.status} is not success):\n ${response.bodyAsText()}")
-            val redirectUrl = URLBuilder("$baseUrl/login").run {
-                parameters.append("redirectUrl", call.request.uri)
-                build()
-            }
+            LOGGER.warn(
+                "Cannot read userinfo from https://www.googleapis.com/oauth2/v2/userinfo (response status ${response.status} is not success):\n ${response.bodyAsText()}",
+            )
+            val redirectUrl =
+                URLBuilder("$baseUrl/login").run {
+                    parameters.append("redirectUrl", call.request.uri)
+                    build()
+                }
             call.respondRedirect(redirectUrl)
             return null
         }
@@ -93,27 +103,25 @@ suspend fun getPersonalGreeting(
     } catch (e: JsonConvertException) {
         throw RuntimeException(
             "Cannot read userinfo from responses returned by https://www.googleapis.com/oauth2/v2/userinfo:\n ${response.bodyAsText()}",
-            e
+            e,
         )
     }
 }
 
-suspend fun getSession(
-    call: ApplicationCall
-): UserSession? {
+suspend fun getSession(call: ApplicationCall): UserSession? {
     val userSession: UserSession? = call.sessions.get()
-    //if there is no session, redirect to login
+    // if there is no session, redirect to login
     if (userSession == null) {
-        val redirectUrl = URLBuilder("$baseUrl/login").run {
-            parameters.append("redirectUrl", call.request.uri)
-            build()
-        }
+        val redirectUrl =
+            URLBuilder("$baseUrl/login").run {
+                parameters.append("redirectUrl", call.request.uri)
+                build()
+            }
         call.respondRedirect(redirectUrl)
         return null
     }
     return userSession
 }
-
 
 @Serializable
 data class UserInfo(
