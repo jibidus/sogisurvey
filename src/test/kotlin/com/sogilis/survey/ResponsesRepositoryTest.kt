@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 
-class ResponseRepositoryTest {
+class ResponsesRepositoryTest {
     companion object {
         @JvmField
         @RegisterExtension

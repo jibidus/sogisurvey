@@ -1,6 +1,6 @@
 package com.sogilis.survey
 
-import com.sogilis.survey.ResponseRepositoryTest.Companion.database
+import com.sogilis.survey.ResponsesRepositoryTest.Companion.database
 import org.jooq.DSLContext
 import org.jooq.SQLDialect
 import org.jooq.impl.DSL
