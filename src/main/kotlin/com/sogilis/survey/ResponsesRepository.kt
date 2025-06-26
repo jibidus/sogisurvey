@@ -15,8 +15,7 @@ class ResponsesRepository(
         dsl
             .selectCount()
             .from(Responses.table)
-            .fetch()
-            .single()
+            .fetchOne()!!
             .value1()
 
     fun save(response: Response) {

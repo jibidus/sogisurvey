@@ -98,16 +98,14 @@ class ResponsesRepositoryTest {
             database.dsl
                 .select(Responses.comment)
                 .from(Responses.table)
-                .fetch()
-                .single()
+                .fetchOne()!!
                 .value1()
         assertEquals("global ' comment", storedGlobalComment)
         val storedPriorityComment =
             database.dsl
                 .select(Priorities.comment)
                 .from(Priorities.table)
-                .fetch()
-                .single()
+                .fetchOne()!!
                 .value1()
         assertEquals("priority ' comment", storedPriorityComment)
     }
@@ -137,8 +135,7 @@ class ResponsesRepositoryTest {
             database.dsl
                 .select(count())
                 .from(Priorities.table)
-                .fetch()
-                .single()
+                .fetchOne()!!
                 .value1()
         assertEquals(2, prioritiesCount)
     }
