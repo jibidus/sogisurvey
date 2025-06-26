@@ -33,6 +33,13 @@ If the server starts successfully, you'll see the following output:
   see [OAuth documentation](https://github.com/ktorio/ktor-documentation/tree/3.1.3/codeSnippets/snippets/auth-oauth-google))
 * `BASE_URL` (default is `http://localhost:8080`)
 
+## Monitoring
+
+| Command                           |                                             |
+|-----------------------------------|---------------------------------------------|
+| `heroku logs -t --app sogisurvey` | Show production logs                        |
+| `heroku pg:psql --app sogisurvey` | Open interactive psql command to production |
+
 ## Documentation
 
 * Pico CSS: https://picocss.com/docs/
