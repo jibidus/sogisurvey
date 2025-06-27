@@ -55,15 +55,6 @@ fun homePage(
                 color: var(--pico-muted-color);
                 font-size: 0.8em;
               }
-              
-              option:before {
-                content: '';
-                display: block;
-                width: 0;
-                height: auto;
-                padding-left: 3px;
-                text-indent: 0;
-              }
             }
             """.trimIndent()
     }) {
