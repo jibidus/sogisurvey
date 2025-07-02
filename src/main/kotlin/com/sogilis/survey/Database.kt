@@ -1,5 +1,6 @@
 package com.sogilis.survey
 
+import org.jooq.Field
 import org.jooq.impl.DSL
 import org.jooq.impl.DSL.field
 
@@ -11,7 +12,7 @@ object Database {
     object RESPONSES {
         val table = DSL.table("sogisurvey.responses")
         val ID = field("id")
-        val AUTHOR = field("author")
+        val AUTHOR: Field<String> = field("author", String::class.java)
         val COMMENT = field("comment")
     }
 
