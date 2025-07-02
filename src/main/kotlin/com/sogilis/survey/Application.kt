@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
 fun Application.installModules(connection: Connection) {
     configureSecurity()
     configureRouting(connection)
-    GetParticipants.configureOn(this, connection)
+    GetParticipation.configureOn(this, connection)
 }
 
 fun resetDatabase(connection: Connection) {

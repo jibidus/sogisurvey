@@ -11,19 +11,19 @@ import kotlinx.html.ul
 import org.jooq.impl.DSL
 import java.sql.Connection
 
-object GetParticipants {
+object GetParticipation {
     fun configureOn(
         application: Application,
         connection: Connection,
     ) {
         application.routing {
-            get("/participants") {
+            get("/participation") {
                 val participants =
                     DSL
                         .using(connection)
                         .select(Database.RESPONSES.AUTHOR)
                         .from(Database.RESPONSES.table)
-                        .orderBy(Database.RESPONSES.AUTHOR)
+                        .orderBy(Database.RESPONSES.ID.desc())
                         .query
                         .map {
                             it.getValue(Database.RESPONSES.AUTHOR)
